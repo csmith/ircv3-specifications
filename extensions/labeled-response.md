@@ -54,6 +54,10 @@ Servers advertising this capability indicate that they are capable of handling t
 
 This specification adds the `draft/labeled-response` batch type, described below.
 
+### Messages
+
+An `ACK` message MAY be sent from the server to a client in response to a labeled message if no response is otherwise required. The `ACK` message SHOULD NOT include any arguments.
+
 ### Tags
 
 This specification adds the `draft/label` message tag, which has a required value.
@@ -67,7 +71,7 @@ If a response consists of more than one message, and the `batch` capability is e
 * An existing type applicable to the entire response
 * `draft/labeled-response`
 
-If no response is required, an empty batch MUST be sent.
+If no response is required, either an empty batch or an `ACK` message MUST be sent.
 
 If `batch` has not been enabled, the tag MAY be included on only one of the messages in the response.
 
@@ -124,6 +128,21 @@ Failed `PRIVMSG` with `ERR_NOSUCHNICK`
     ...
     Server: @batch=NMzYSq45x :irc.example.com 318 client nick :End of /WHOIS list.
     Server: :irc.example.com BATCH -NMzYSq45x
+
+---
+
+`KILL` with empty batch as a response
+
+    Client: @label=V4HBHgoxLV KILL nick
+    Server: @label=V4HBHgoxLV :irc.example.com BATCH +qw2yPGhdRg labeled-response
+    Server: :irc.example.com BATCH -qw2yPGhdRg
+
+---
+
+`KILL` with `ACK` message as a response
+
+    Client: @label=Gi4avvLkW9 KILL nick
+    Server: @label=Gi4avvLkW9 :irc.example.com ACK
 
 ## Alternatives
 
